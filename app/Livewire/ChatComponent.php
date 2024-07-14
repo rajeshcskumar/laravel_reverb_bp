@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
 use Livewire\Component;
 
 class ChatComponent extends Component
 {
-    // public $user_id;
+    public $user;
     public function mount($user_id)
     {
-        // dd($user_id);
+        $this->user = User::whereId($user_id)->first();
     }
     public function render()
     {
