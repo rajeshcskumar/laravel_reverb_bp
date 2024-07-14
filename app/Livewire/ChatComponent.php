@@ -47,7 +47,7 @@ class ChatComponent extends Component
         $chatMessage->receiver_id = $this->receiver_id;
         $chatMessage->message = $this->message;
         $chatMessage->save();
-
+        $this->appendChatMessage($chatMessage);
         broadcast(new MessageSendEvent($chatMessage))->toOthers();
 
         $this->message = '';
@@ -57,7 +57,11 @@ class ChatComponent extends Component
     #[On('echo-private:chat-channel.{sender_id},MessageSendEvent')]
     public function listenForMessage($event)
     {
-        dd($event);
+        $chatMessage = Message::whereId($event['message']['id'])
+            ->with('sender:id,name', 'receiver:id,name')
+            ->first();
+
+        $this->appendChatMessage($chatMessage);
     }
 
     public function appendChatMessage($message)
