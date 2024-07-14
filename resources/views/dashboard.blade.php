@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     @foreach ($users as $item)
-                        <p>{{ $item->name }}</p>
+                        <p><a href="{{ route('chat', $item->id) }}">{{ $item->name }}</a></p>
                     @endforeach
                 </div>
             </div>

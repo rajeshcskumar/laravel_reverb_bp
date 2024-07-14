@@ -11,6 +11,14 @@ Route::get('/dashboard', function () {
         'users' => $users
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::get('/chat/{id}', function ($id) {
+    return view('chat', [
+        'id' => $id
+    ]);
+})->middleware(['auth', 'verified'])->name('chat');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
