@@ -14,18 +14,39 @@ class ChatComponent extends Component
         $this->sender_id = auth()->user()->id;
         $this->receiver_id = $user_id;
 
+
         $messages = Message::where(function ($query) {
             $query->where('sender_id', $this->sender_id)
                 ->where('receiver_id', $this->receiver_id);
         })->orWhere(function ($query) {
-            $query->where('receiver_id', $this->receiver_id)
-                ->where('sender_id', $this->sender_id);
+            $query->where('sender_id', $this->receiver_id)
+                ->where('receiver_id', $this->sender_id);
         })
             ->with('sender:id,name', 'receiver:id,name')
             ->get();
 
+        foreach ($messages as $message) {
+            $this->appendChatMessage($message);
+        }
+        // dd($this->messages);
+
         $this->user = User::whereId($user_id)->first();
     }
+
+    public function sendMessages()
+    {
+
+    }
+    public function appendChatMessage($message)
+    {
+        $this->messages[] = [
+            'id' => $message->id,
+            'message' => $message->message,
+            'sender' => $message->sender->name,
+            'receiver' => $message->receiver->name
+        ];
+    }
+
     public function render()
     {
         return view('livewire.chat-component');
